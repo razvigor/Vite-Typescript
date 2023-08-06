@@ -1,11 +1,21 @@
+import Title from '../module/TitleModule';
+import MetaTagsModule from '../module/MetatagsModule';
+
 export default class Error {
 	constructor(_data) {
 		this._data = _data;
 	}
-	prevousPage() {
-		history.back();
-	}
+
 	render() {
+		const titleHead = new Title('Mex Santos - Error 404');
+		titleHead.init();
+		const meta = new MetaTagsModule(
+			'A wide selection of food from Mexican cuisine',
+			'./img/arrozcontortillas_tn.jpg',
+			'Mex Santos -  Error 404',
+			location.href
+		);
+		meta.init();
 		const main = document.createElement('main');
 		main.className = 'my-8 flex';
 		main.style.minHeight = 'calc(100vh - 180px)';

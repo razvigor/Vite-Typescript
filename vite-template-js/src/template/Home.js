@@ -1,12 +1,25 @@
+import Title from '../module/TitleModule';
+import MetaTagsModule from '../module/MetatagsModule';
+
 export default class Home {
 	constructor(_data) {
 		this._data = _data;
 	}
 
 	render() {
+		const title = new Title('Mex Santos');
+		title.init();
+		const meta = new MetaTagsModule(
+			'A wide selection of food from Mexican cuisine',
+			'./img/arrozcontortillas_tn.jpg',
+			'Mex Santos',
+			location.href
+		);
+		meta.init();
 		const main = document.createElement('main');
 		main.className = 'my-8';
 		main.innerHTML = `<div class="container mx-auto px-6">
+		<h1 class='text-3xl lg:text-4xl mt-8 mb-12'>Mex Santos</h1>
 				<div class="h-96 rounded-md overflow-hidden bg-cover bg-center" style="background-image: url('${
 					this._data[0].items[1].img
 				}.jpg')">

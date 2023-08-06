@@ -1,9 +1,21 @@
+import Title from '../module/TitleModule';
+import MetaTagsModule from '../module/MetatagsModule';
+
 export default class About {
 	constructor(_data) {
 		this._data = _data;
 	}
 
 	render() {
+		const title = new Title('Mex Santos -  About Us');
+		title.init();
+		const meta = new MetaTagsModule(
+			'A wide selection of food from Mexican cuisine',
+			'./img/arrozcontortillas_tn.jpg',
+			'Mex Santos -  About Us',
+			location.href
+		);
+		meta.init();
 		const main = document.createElement('main');
 		main.className = 'my-8 flex';
 		main.style.minHeight = 'calc(100vh - 180px)';
