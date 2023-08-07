@@ -12,7 +12,7 @@ const navbar = new Navbar({
 navbar.render();
 
 const path = window.location.pathname;
-
+const id = path.split('/').slice(-1)[0];
 switch (path) {
 	case '/':
 		import('./template/Home')
@@ -43,7 +43,15 @@ switch (path) {
 			})
 			.catch((err) => console.log(err));
 		break;
-
+	case `/shop/${id}`:
+		import('./template/ShopItem')
+			.then((ShopItemModule) => {
+				const ShopItemPage = ShopItemModule.default;
+				const shopItem = new ShopItemPage();
+				shopItem.render();
+			})
+			.catch((err) => console.log(err));
+		break;
 	case '/cart':
 		import('./template/Cart')
 			.then((CartModule) => {
