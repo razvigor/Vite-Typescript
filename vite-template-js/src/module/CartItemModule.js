@@ -1,5 +1,5 @@
 export default class CartItemModule {
-	constructor(id, img, title, _quantity = 0, price, _total = 0) {
+	constructor(id, img, title, _quantity = 1, price, _total = 0) {
 		this.id = id;
 		this.img = img;
 		this.title = title;

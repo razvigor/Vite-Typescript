@@ -5,7 +5,7 @@ export default class Footer {
 
 	render() {
 		const footer = document.createElement('footer');
-		footer.className = 'w-full bg-gray-900 text-white py-8';
+		footer.className = 'w-full bg-gray-900 text-white py-8 order-2';
 		const p = document.createElement('p');
 		p.className = 'text-center';
 		p.innerHTML = `&copy;Copyright ${this.year} All rights reserved`;

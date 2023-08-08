@@ -17,7 +17,7 @@ export default class Home {
 		);
 		meta.init();
 		const main = document.createElement('main');
-		main.className = 'my-8';
+		main.className = 'my-8 order-1';
 
 		const container = document.createElement('div');
 		container.className = 'container mx-auto px-6';

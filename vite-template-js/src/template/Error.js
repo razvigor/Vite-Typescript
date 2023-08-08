@@ -17,7 +17,7 @@ export default class Error {
 		);
 		meta.init();
 		const main = document.createElement('main');
-		main.className = 'my-8 flex';
+		main.className = 'my-8 flex order-1';
 		main.style.minHeight = 'calc(100vh - 180px)';
 		main.innerHTML = `
     <div class="container flex items-center justify-center px-6 py-12 mx-auto">

@@ -1,15 +1,19 @@
 import './css/style.css';
 import Footer from './template/Footer';
-import Navbar from './template/Navbar';
 import data from './data/data.json';
 
-const navbar = new Navbar({
-	home: '/',
-	about: '/about',
-	shop: '/shop',
-	cart: '/cart',
-});
-navbar.render();
+import('./template/Navbar')
+	.then((NavbarModule) => {
+		const NavbarPage = NavbarModule.default;
+		const navbar = new NavbarPage({
+			home: '/',
+			about: '/about',
+			shop: '/shop',
+			cart: '/cart',
+		});
+		navbar.render();
+	})
+	.catch((err) => console.log(err));
 
 const path = window.location.pathname;
 const id = path.split('/').slice(-1)[0];

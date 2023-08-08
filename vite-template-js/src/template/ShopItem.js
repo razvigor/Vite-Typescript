@@ -20,6 +20,7 @@ export default class ShopItem {
 		meta.init();
 
 		const main = document.createElement('main');
+		main.className = 'order-1';
 		const container = document.createElement('div');
 		container.className = 'container mx-auto';
 

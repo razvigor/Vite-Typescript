@@ -24,8 +24,10 @@ export default class Shop extends ShopItemsModule {
 		meta.init();
 
 		const main = document.createElement('main');
+		main.className = 'order-1';
+		main.style.minHeight = 'calc(100vh - 180px)';
 		const container = document.createElement('div');
-		container.className = 'container mx-auto';
+		container.className = 'container mx-auto px-3 lg:px-0';
 
 		const h1 = document.createElement('h1');
 		h1.className = 'text-3xl lg:text-4xl mt-8 mb-12';
@@ -35,12 +37,12 @@ export default class Shop extends ShopItemsModule {
 		// Shop Container
 		const shopContainer = document.createElement('div');
 		shopContainer.className =
-			'flex flex-wrap justify-between items-start mb-12';
+			'flex flex-wrap justify-between items-start gap-y-4 mb-12';
 		container.append(shopContainer);
 
 		// Aside with category menu
 		const aside = document.createElement('aside');
-		aside.className = 'w-[100%] md:w-[20%] p-4 bg-gray-100 rounded-md';
+		aside.className = 'w-[100%] lg:w-[20%] p-4 bg-gray-100 rounded-md';
 		shopContainer.append(aside);
 
 		const asideTitle = document.createElement('h2');
@@ -59,7 +61,10 @@ export default class Shop extends ShopItemsModule {
 		firsItemBtn.className = 'text-md py-2 text-gray-800 hover:text-green-400';
 		firsItemBtn.textContent = 'All';
 		firsItemBtn.addEventListener('click', () => {
-			console.log('All');
+			const articles = document.querySelectorAll('article');
+			articles.forEach((item) => {
+				item.classList.remove('hidden');
+			});
 		});
 		firstItem.append(firsItemBtn);
 		//List items for categories
@@ -71,7 +76,14 @@ export default class Shop extends ShopItemsModule {
 			buttons.className = 'text-md py-2 text-gray-800 hover:text-green-400';
 			buttons.textContent = item.name;
 			buttons.addEventListener('click', () => {
-				console.log(item.id);
+				const elem = document.getElementById(item.id);
+				const articles = document.querySelectorAll('article');
+				articles.forEach((elItem) => {
+					if (elItem.id !== item.id) {
+						elItem.classList.add('hidden');
+					}
+				});
+				elem.classList.remove('hidden');
 			});
 			listItems.append(buttons);
 		});
@@ -80,7 +92,7 @@ export default class Shop extends ShopItemsModule {
 
 		const section = document.createElement('section');
 		section.className =
-			'w-100 md:w-[75%] p-4 flex flex-col gap-y-12 bg-gray-100 rounded-md';
+			'w-100 lg:w-[75%] p-4 flex flex-col gap-y-12 bg-gray-100 rounded-md';
 		shopContainer.append(section);
 
 		// List data and create shop elements
@@ -88,6 +100,7 @@ export default class Shop extends ShopItemsModule {
 		this.data.forEach((item) => {
 			const shopContainer = document.createElement('article');
 			shopContainer.className = 'w-full';
+			shopContainer.id = item.id;
 			section.append(shopContainer);
 
 			const shopTitle = document.createElement('h2');
@@ -100,7 +113,8 @@ export default class Shop extends ShopItemsModule {
 			shopContainer.append(shopDesription);
 
 			const shopCartsContainer = document.createElement('div');
-			shopCartsContainer.className = 'grid grid-cols-1 md:grid-cols-4';
+			shopCartsContainer.className =
+				'grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4';
 			shopContainer.append(shopCartsContainer);
 
 			// List all shopItems and create elements
@@ -150,7 +164,7 @@ export default class Shop extends ShopItemsModule {
 					'text-sm rounded-md bg-green-400 px-2 py-1 hover:bg-green-600';
 				button.textContent = 'Add to Cart';
 				button.addEventListener('click', () => {
-					console.log(item.id);
+					this.addItemToCart(item.id);
 				});
 				buttonContainer.append(button);
 			});
