@@ -1,4 +1,3 @@
-import CartItemModule from './CartItemModule';
 import ShopItemsModule from './ShopItemsModule';
 
 export default class CartItemsModule {
@@ -41,9 +40,9 @@ export default class CartItemsModule {
 				id: item.id,
 				img: item.img,
 				title: item.title,
-				quantity: 1,
+				quantity: item.quantity ? item.quantity : 1,
 				price: item.price,
-				total: item.price,
+				total: item.total ? item.total : item.price,
 			};
 
 			return cart;
@@ -53,5 +52,50 @@ export default class CartItemsModule {
 			this.data.map((item) => item.total).reduce((acc, item) => (acc += item));
 		this.shipping = 8;
 		this.total = this.data.length && this.subtotal + this.shipping;
+	}
+	increasItemQty(id) {
+		const item = this.data.find((item) => item.id === id);
+		item.quantity += 1;
+		const shop = new ShopItemsModule();
+		const storage = shop.getFromStorage('cart');
+		const storageItem = storage.find(
+			(storageItem) => storageItem.id === item.id
+		);
+		storageItem.quantity += 1;
+		storageItem.total = storageItem.quantity * storageItem.price;
+		localStorage.setItem('cart', JSON.stringify(storage));
+	}
+	decreaseItemQty(id) {
+		const item = this.data.find((item) => item.id === id);
+		if (item.quantity > 1) {
+			item.quantity -= 1;
+			const shop = new ShopItemsModule();
+			const storage = shop.getFromStorage('cart');
+			const storageItem = storage.find(
+				(storageItem) => storageItem.id === item.id
+			);
+			storageItem.quantity -= 1;
+			storageItem.total = storageItem.quantity * storageItem.price;
+			localStorage.setItem('cart', JSON.stringify(storage));
+		} else {
+			return;
+		}
+	}
+	updateCartContent(data, span, itemTotal, input, subtotalP, spanTotal) {
+		span.textContent = data.quantity;
+		itemTotal.textContent = data.total;
+		input.value = data.quantity;
+	}
+	addQuntityByValue(id, newValue) {
+		const item = this.data.find((item) => item.id === id);
+		item.quantity = +newValue;
+		const shop = new ShopItemsModule();
+		const storage = shop.getFromStorage('cart');
+		const storageItem = storage.find(
+			(storageItem) => storageItem.id === item.id
+		);
+		storageItem.quantity = +newValue;
+		storageItem.total = storageItem.quantity * storageItem.price;
+		localStorage.setItem('cart', JSON.stringify(storage));
 	}
 }

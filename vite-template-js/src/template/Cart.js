@@ -60,7 +60,6 @@ export default class Cart extends CartItemsModule {
 			cart.append(cartItemContainer);
 			cartItemContainer.append(cartList);
 			this.data.forEach((item) => {
-				console.log(item);
 				const listItem = document.createElement('li');
 				listItem.className =
 					'flex justify-between relative w-full flex-col pb-6 text-left sm:flex-row';
@@ -72,11 +71,19 @@ export default class Cart extends CartItemsModule {
 
 				const imageContainer = document.createElement('div');
 				imageContainer.className = 'shrink-0 relative';
-				imageContainer.innerHTML = `
-				<span class="absolute top-1 left-1 flex h-6 w-6 items-center justify-center rounded-full border bg-white text-sm font-medium text-gray-500 shadow sm:-top-2 sm:-right-2">${item.quantity}</span>
-				<img class="h-24 w-24 max-w-full rounded-lg object-cover" src="${item.img}_tn.jpg" alt="${item.title}" />
-				`;
 				listFlex.append(imageContainer);
+
+				const span = document.createElement('span');
+				span.className =
+					'absolute top-1 left-1 flex h-6 w-6 items-center justify-center rounded-full border bg-white text-sm font-medium text-gray-500 shadow sm:-top-2 sm:-right-2';
+				span.textContent = item.quantity;
+
+				const img = document.createElement('img');
+				img.src = `${item.img}_tn.jpg`;
+				img.alt = item.title;
+				img.className = 'h-24 w-24 max-w-full rounded-lg object-cover';
+				imageContainer.append(img);
+				imageContainer.append(span);
 
 				const contentContainer = document.createElement('div');
 				contentContainer.className = 'pr-8 sm:pr-5';
@@ -93,13 +100,12 @@ export default class Cart extends CartItemsModule {
 				const totalContainer = document.createElement('div');
 				totalContainer.className =
 					'mt-4 flex flex-col items-end justify-between sm:mt-0 sm:items-start sm:justify-end';
-				totalContainer.innerHTML = `
-				<p class="shrink-0 w-20 text-base font-semibold text-gray-900 sm:order-2 sm:ml-8 sm:text-right">$${item.total.toFixed(
-					2
-				)}
-				</p>
-				`;
 				rightSide.append(totalContainer);
+				const itemTotal = document.createElement('p');
+				itemTotal.className =
+					'shrink-0 w-20 text-base font-semibold text-gray-900 sm:order-2 sm:ml-8 sm:text-right';
+				itemTotal.textContent = `$${item.total.toFixed(2)}`;
+				totalContainer.append(itemTotal);
 
 				const quantityContainer = document.createElement('div');
 				quantityContainer.className =
@@ -114,7 +120,7 @@ export default class Cart extends CartItemsModule {
 				<svg width="20" height="20" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"> <path fill-rule="evenodd" clip-rule="evenodd" d="M11 8H4V7H11V8Z" fill="currentColor"/> </svg>
 				`;
 				btnDecrise.addEventListener('click', () => {
-					console.log('decrise');
+					this.decreaseItemQty(item.id);
 				});
 				quantityContainer.append(btnDecrise);
 
@@ -124,8 +130,8 @@ export default class Cart extends CartItemsModule {
 				input.value = item.quantity;
 				input.className =
 					'bg-gray-100 text-gray-900 width w-[35px] text-center text-xl';
-				input.addEventListener('change', () => {
-					console.log(input.value);
+				input.addEventListener('change', (e) => {
+					this.addQuntityByValue(item.id, e.target.value);
 				});
 				quantityContainer.append(input);
 
@@ -137,7 +143,7 @@ export default class Cart extends CartItemsModule {
 					<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16"> <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/> </svg>
 				`;
 				btnIncrese.addEventListener('click', () => {
-					console.log('increse');
+					this.increasItemQty(item.id);
 				});
 				quantityContainer.append(btnIncrese);
 
@@ -161,27 +167,40 @@ export default class Cart extends CartItemsModule {
 			const infoContainer = document.createElement('div');
 			infoContainer.className = 'space-y-3 border-t border-b py-8 px-4';
 			infoContainer.innerHTML = `
-			<div class="flex items-center justify-between">
-					<p class="text-gray-400">Subtotal</p>
-					<p class="text-lg font-semibold text-gray-900">$${this.subtotal?.toFixed(2)}</p>
-				</div>
 				<div class="flex items-center justify-between">
 					<p class="text-gray-400">Shipping</p>
 					<p class="text-lg font-semibold text-gray-900">$${this.shipping?.toFixed(2)}</p>
 				</div>
 			`;
+
 			cart.append(infoContainer);
+
+			const subtotalContaier = document.createElement('div');
+			subtotalContaier.className = 'flex items-center justify-between';
+			subtotalContaier.innerHTML = `<p class="text-gray-400">Subtotal</p>`;
+			infoContainer.prepend(subtotalContaier);
+
+			const subtotalP = document.createElement('p');
+			subtotalP.className = 'text-lg font-semibold text-gray-900';
+			subtotalP.textContent = `$${this.subtotal?.toFixed(2)}`;
+			subtotalContaier.append(subtotalP);
 
 			const infoTotalContainer = document.createElement('div');
 			infoTotalContainer.className =
 				'mt-6 flex items-center justify-between px-4';
 			infoTotalContainer.innerHTML = `
 			<p class="text-sm font-medium text-gray-900">Total</p>
-				<p class="text-2xl font-semibold text-gray-900"><span class="text-xs font-normal text-gray-400">USD </span>${this.total?.toFixed(
-					2
-				)}</p>
 			`;
 			cart.append(infoTotalContainer);
+
+			const totalP = document.createElement('p');
+			totalP.className = 'text-xs font-normal text-gray-400';
+			totalP.textContent = 'USD ';
+			const spanTotal = document.createElement('span');
+			spanTotal.className = 'text-2xl font-semibold text-gray-900';
+			spanTotal.textContent = this.total?.toFixed(2);
+			totalP.append(spanTotal);
+			infoTotalContainer.append(totalP);
 
 			const btnBuyContainer = document.createElement('div');
 			btnBuyContainer.className = 'mt-6 text-center';
